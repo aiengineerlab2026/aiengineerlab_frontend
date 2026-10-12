@@ -1,8 +1,9 @@
 import type { ApiErrorBody } from "@/app/restaurant/types/api";
 
-export const API_BASE_URL = (
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api/v1"
-).replace(/\/$/, "");
+/** NEXT_PUBLIC_API_BASE_URL is the backend host; the `/api/v1` prefix is added here (a value that already ends with it also works). */
+export const API_BASE_URL = `${(process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000")
+  .replace(/\/$/, "")
+  .replace(/\/api\/v1$/, "")}/api/v1`;
 
 export class ApiError extends Error {
   constructor(
