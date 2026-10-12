@@ -308,7 +308,7 @@ function ScoreBadge({
  * The expanded row: an "inspection card". The card chrome (inset background, border, padding) and the two-column
  * grids only apply from `lg` up; below that the same blocks simply stack.
  */
-function Detail({ item, nameOf }: { item: LiveEvaluation; nameOf: (id: string) => string }) {
+function Detail({ item, nameOf, isLast }: { item: LiveEvaluation; nameOf: (id: string) => string; isLast: boolean }) {
   const relevant = new Set(item.relevant_dish_ids);
   const [showCtx, setShowCtx] = useState(false);
   const judged = item.stage !== "queued" && item.stage !== "judging_relevance";
@@ -337,7 +337,11 @@ function Detail({ item, nameOf }: { item: LiveEvaluation; nameOf: (id: string) =
         {item.stage === AWAITING && (
           <Alert variant="info">
             <Info />
-            <AlertDescription>Not evaluated yet. Press Evaluate to score this question.</AlertDescription>
+            <AlertDescription>
+              {isLast
+                ? "Not evaluated yet. Press Evaluate last question to score it."
+                : "Not evaluated. Evaluate only scores the last question you asked, and a newer one exists."}
+            </AlertDescription>
           </Alert>
         )}
         {item.stage === NOT_SCORED && (
@@ -607,7 +611,7 @@ function Feed({ items }: { items: LiveEvaluation[] }) {
                 {open === i.id && (
                   <tr className="bg-slate-50">
                     <td colSpan={11} className="border-b border-slate-100 p-0">
-                      <Detail item={i} nameOf={nameOf} />
+                      <Detail item={i} nameOf={nameOf} isLast={n === 0} />
                     </td>
                   </tr>
                 )}
@@ -743,14 +747,15 @@ export function LiveEvaluationView() {
     },
     onError: (e) => toast.error(errorMessage(e)),
   });
-  // At most this many of the newest not-yet-evaluated questions go into one run.
-  const waiting = rows.filter((r) => r.stage === AWAITING).slice(0, 10);
+  // Evaluate always scores the last question asked (rows are newest first), and only while it is still waiting.
+  const last = rows[0];
+  const lastWaiting = last?.stage === AWAITING ? last : undefined;
   const run = useMutation({
-    mutationFn: () => evaluations.runLive(waiting.map((r) => r.message_id)),
+    mutationFn: () => evaluations.runLive([lastWaiting!.message_id]),
     onSuccess: (r) => {
       qc.invalidateQueries({ queryKey: keys.live });
       qc.invalidateQueries({ queryKey: ["live-scores"] });
-      toast.success(`Evaluating ${r.queued} question${r.queued === 1 ? "" : "s"}…`);
+      toast.success(r.queued ? "Evaluating the last question…" : "The last question was already evaluated.");
     },
     onError: (e) => toast.error(errorMessage(e)),
   });
@@ -793,12 +798,12 @@ export function LiveEvaluationView() {
             type="button"
             size="sm"
             className="ml-auto bg-emerald-600 font-medium text-white hover:bg-emerald-700"
-            disabled={!enabled || !waiting.length || run.isPending || (!!usage?.enabled && usage.remaining <= 0)}
+            disabled={!enabled || !lastWaiting || run.isPending || (!!usage?.enabled && usage.remaining <= 0)}
+            title={last && !lastWaiting ? "The last question is already evaluated (or cannot be). Ask a new one." : undefined}
             onClick={() => run.mutate()}
           >
             {run.isPending ? <Loader2 className="animate-spin" /> : <Play />}
-            Evaluate
-            {waiting.length ? ` ${waiting.length} question${waiting.length === 1 ? "" : "s"}` : ""}
+            Evaluate last question
           </Button>
         </div>
 
@@ -839,8 +844,8 @@ export function LiveEvaluationView() {
         </div>
 
         <p className="mt-4 text-xs leading-relaxed text-gray-500">
-          Ask the assistant for recommendations, then press <strong>Evaluate</strong> to score the questions asked in
-          this browser. Nothing is scored while you chat. The questions, replies and retrieved context are read from
+          Ask the assistant for recommendations, then press <strong>Evaluate last question</strong> to score the most
+          recent question asked in this browser. Nothing is scored while you chat. The questions, replies and retrieved context are read from
           this browser&apos;s localStorage; the server keeps only the scores. Without human labels, the dishes that{" "}
           <em>should</em> have been found are judged by the LLM against the whole menu. Precision/Recall are computed
           from the retrieved dishes, RAGAS context precision/recall by matching the chunks the answer was built from
@@ -855,7 +860,7 @@ export function LiveEvaluationView() {
           <p>
             No questions yet. Ask the assistant for a recommendation in the phone simulator (for example{" "}
             <em>&ldquo;high-protein chicken under $20&rdquo;</em>). It appears here, read from this browser&apos;s
-            storage; press Evaluate to score it.
+            storage; press Evaluate last question to score it.
           </p>
         </div>
       ) : (
