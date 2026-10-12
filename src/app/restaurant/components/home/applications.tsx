@@ -10,6 +10,9 @@ import type { AppInfo } from "@/app/restaurant/types/api";
 /** Custom artwork per app id; apps without one fall back to their icon. */
 const LOGOS: Record<string, string> = { restaurant: "/restaurant-logo.jpg" };
 
+/** Where each app lives in this frontend; takes precedence over the route the backend reports (older backends say /apps/restaurant). */
+const ROUTES: Record<string, string> = { restaurant: "/restaurant" };
+
 /** Grid columns on large screens; placeholders fill the last row so a single app doesn't look lost. */
 const COLUMNS = 3;
 
@@ -51,7 +54,7 @@ function AppCard({ app }: { app: AppInfo }) {
         </span>
       ) : (
         <Link
-          href={app.route}
+          href={ROUTES[app.id] ?? app.route}
           className={cn(
             action,
             "group/open py-3 text-sm bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-md shadow-emerald-700/25",
