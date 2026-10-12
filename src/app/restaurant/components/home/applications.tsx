@@ -2,8 +2,11 @@ import { createElement } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Layers, Plus, ServerCrash } from "lucide-react";
+import { GithubIcon } from "@/app/restaurant/components/github-icon";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/restaurant/components/ui/tooltip";
 import { appIcon } from "@/app/restaurant/lib/app-icons";
 import { API_BASE_URL } from "@/app/restaurant/lib/client";
+import { RESTAURANT_GITHUB_URL } from "@/app/restaurant/lib/links";
 import { cn } from "@/app/restaurant/lib/utils";
 import type { AppInfo } from "@/app/restaurant/types/api";
 
@@ -13,35 +16,73 @@ const LOGOS: Record<string, string> = { restaurant: "/restaurant-logo.jpg" };
 /** Where each app lives in this frontend; takes precedence over the route the backend reports (older backends say /apps/restaurant). */
 const ROUTES: Record<string, string> = { restaurant: "/restaurant" };
 
+/** Source repository per app id (the URLs come from env, see lib/links.ts). */
+const GITHUB_URLS: Record<string, string | undefined> = { restaurant: RESTAURANT_GITHUB_URL };
+
 /** Grid columns on large screens; placeholders fill the last row so a single app doesn't look lost. */
 const COLUMNS = 3;
 
+// Paper palette: warm off-white sheet, hairline ink borders, print green.
+const PAPER = "bg-(--paper)";
+const HAIRLINE = "border border-(color:--hair)";
+
 function AppCard({ app }: { app: AppInfo }) {
   const logo = LOGOS[app.id];
+  const github = GITHUB_URLS[app.id];
   const disabled = app.status !== "active";
-  const action =
-    "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold shadow-sm transition-all duration-150";
+  const action = cn(
+    "inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold transition-[transform,box-shadow,background-color] duration-100",
+    "hover:translate-y-px active:translate-y-px focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-(color:--paper) focus-visible:outline-none",
+  );
   return (
-    <article className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/80 bg-gradient-to-b from-white to-slate-50/70 p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-900/10">
-      <span
-        aria-hidden
-        className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-emerald-400 to-teal-400 opacity-70 transition-opacity group-hover:opacity-100"
-      />
+    <article
+      className={cn(
+        "group relative flex h-full flex-col justify-between rounded-xl p-6 transition-shadow duration-200",
+        PAPER,
+        HAIRLINE,
+        "shadow-[0_1px_3px_rgba(0,0,0,0.05),0_10px_20px_-5px_rgba(0,0,0,0.04)]",
+        "hover:shadow-[0_1px_3px_rgba(0,0,0,0.06),0_14px_28px_-6px_rgba(0,0,0,0.09)]",
+        // Full-width green accent along the top edge; overflow-hidden clips it to the rounded corners.
+        "overflow-hidden before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-to-r before:from-(--brand) before:via-(--brand-bright) before:to-(--brand)",
+      )}
+    >
+      {github && !disabled && (
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <a
+                href={github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${app.name} source on GitHub`}
+              />
+            }
+            className={cn(
+              "absolute top-5 right-5 inline-flex size-9 items-center justify-center rounded-lg border border-(color:--hair-strong) text-(color:--ink) transition-[transform,background-color] duration-100",
+              PAPER,
+              "hover:translate-y-px hover:border-(color:--hair-strong) hover:bg-(--paper-sunk) active:translate-y-px focus-visible:ring-2 focus-visible:ring-(color:--ink-mute) focus-visible:ring-offset-2 focus-visible:ring-offset-(color:--paper) focus-visible:outline-none",
+            )}
+          >
+            <GithubIcon className="size-[18px]" />
+          </TooltipTrigger>
+          <TooltipContent side="top">View source on GitHub</TooltipContent>
+        </Tooltip>
+      )}
       <div>
-        <div className="mb-5 flex size-20 items-center justify-center overflow-hidden rounded-2xl border border-emerald-100 bg-emerald-50 shadow-md shadow-emerald-900/10 ring-4 ring-emerald-50 transition-all group-hover:scale-105 group-hover:bg-emerald-100/60 group-hover:ring-emerald-100">
+        <div className={cn("mb-5 flex size-20 items-center justify-center overflow-hidden rounded-lg bg-(--paper-sunk)", HAIRLINE)}>
           {logo ? (
             <Image src={logo} alt={`${app.name} logo`} width={160} height={160} unoptimized className="h-full w-full scale-[1.32] object-contain" />
           ) : (
-            createElement(appIcon(app.icon), { className: "h-full w-full p-4 text-emerald-700" })
+            createElement(appIcon(app.icon), { className: "h-full w-full p-4 text-(--brand)" })
           )}
         </div>
-        <h3 className="mb-2 text-xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-emerald-700">{app.name}</h3>
-        <p className="mb-6 flex-grow text-xs leading-relaxed text-slate-500 sm:text-sm">{app.description}</p>
+        <h3 className="mb-2 text-xl font-bold tracking-tight text-(color:--ink)">{app.name}</h3>
+        <p className="mb-6 flex-grow text-xs leading-relaxed text-(color:--ink-2) sm:text-sm">{app.description}</p>
         <div className="mb-6 flex flex-wrap gap-1.5">
           {app.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-emerald-200/70 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-800 transition-colors group-hover:border-emerald-300 group-hover:bg-emerald-100/70"
+              className={cn("rounded-full bg-(--paper-alt) px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-(color:--ink-3)", HAIRLINE)}
             >
               {tag}
             </span>
@@ -49,7 +90,7 @@ function AppCard({ app }: { app: AppInfo }) {
         </div>
       </div>
       {disabled ? (
-        <span className={cn(action, "pointer-events-none border border-slate-200 bg-slate-50 text-slate-400 shadow-none")}>
+        <span className={cn("pointer-events-none mx-auto flex w-[90%] justify-center rounded-lg bg-(--paper-alt) px-4 py-3 text-sm font-semibold text-(color:--ink-mute)", HAIRLINE)}>
           Coming soon
         </span>
       ) : (
@@ -57,9 +98,8 @@ function AppCard({ app }: { app: AppInfo }) {
           href={ROUTES[app.id] ?? app.route}
           className={cn(
             action,
-            "group/open py-3 text-sm bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-md shadow-emerald-700/25",
-            "hover:from-emerald-500 hover:to-emerald-700 hover:shadow-lg hover:shadow-emerald-700/35",
-            "active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none",
+            "group/open mx-auto flex w-[90%] bg-(--brand) text-white shadow-[0_2px_0_var(--brand-dark)] hover:bg-(--brand-hover) hover:shadow-[0_1px_0_var(--brand-dark)] active:shadow-none",
+            "focus-visible:ring-(--brand)",
           )}
         >
           Open Lab
@@ -74,15 +114,15 @@ function PlaceholderCard({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "flex min-h-64 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-6 text-center opacity-75",
+        "flex min-h-64 flex-col items-center justify-center rounded-xl border-2 border-dashed border-(color:--dash) bg-(--paper-soft) p-6 text-center",
         className,
       )}
     >
-      <div className="mb-3 flex size-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400">
+      <div className="mb-3 flex size-12 items-center justify-center rounded-lg border border-dashed border-(color:--dash) bg-(--paper) text-(color:--ink-mute)">
         <Plus className="size-5" />
       </div>
-      <p className="text-sm font-semibold text-slate-600">New Lab Coming Soon</p>
-      <p className="mt-1 max-w-48 text-xs text-slate-400">Another AI application to tune and measure will appear here.</p>
+      <p className="text-sm font-semibold text-(color:--ink-mute)">New Lab Coming Soon</p>
+      <p className="mt-1 max-w-48 text-xs text-(color:--ink-mute)/80">Another AI application to tune and measure will appear here.</p>
     </div>
   );
 }
@@ -91,7 +131,7 @@ export function Applications({ apps, error }: { apps: AppInfo[]; error: string |
   const placeholders = Math.max(0, COLUMNS - apps.length);
   return (
     <section className="mx-auto max-w-7xl px-6 py-10">
-      <h2 className="mb-6 flex items-center gap-2 text-xs font-bold tracking-wider text-slate-400 uppercase">
+      <h2 className="mb-6 flex items-center gap-2 text-xs font-bold tracking-wider text-(color:--ink-mute) uppercase">
         <Layers className="size-3.5" /> Applications
       </h2>
 
@@ -102,9 +142,9 @@ export function Applications({ apps, error }: { apps: AppInfo[]; error: string |
           </h3>
           <p className="mt-1 text-sm text-red-600/90">{error}</p>
           <p className="mt-3 text-sm text-slate-600">
-            Start it with <code className="rounded bg-white px-1.5 py-0.5">uvicorn app.main:app --port 8000</code> in{" "}
-            <code className="rounded bg-white px-1.5 py-0.5">backend/</code>, then refresh. The frontend is configured for{" "}
-            <code className="rounded bg-white px-1.5 py-0.5">{API_BASE_URL}</code>.
+            Start it with <code className="rounded bg-card px-1.5 py-0.5">uvicorn app.main:app --port 8000</code> in{" "}
+            <code className="rounded bg-card px-1.5 py-0.5">backend/</code>, then refresh. The frontend is configured for{" "}
+            <code className="rounded bg-card px-1.5 py-0.5">{API_BASE_URL}</code>.
           </p>
         </div>
       ) : (

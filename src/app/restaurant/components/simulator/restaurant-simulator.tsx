@@ -148,7 +148,7 @@ export function RestaurantSimulator() {
           </div>
         )}
 
-        <nav className="grid grid-cols-3 border-t bg-white pb-2">
+        <nav className="grid grid-cols-3 border-t bg-card pb-2">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}

@@ -84,7 +84,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function DishRow({ dish: d }: { dish: Dish }) {
   return (
-    <article className="rounded-lg border border-gray-200 bg-white p-3 text-xs text-gray-600">
+    <article className="rounded-lg border border-gray-200 bg-card p-3 text-xs text-gray-600">
       <div className="mb-1.5 flex flex-wrap items-center gap-2">
         <h3 className="text-sm font-semibold text-gray-900">{d.name}</h3>
         <Pill>{d.category}</Pill>

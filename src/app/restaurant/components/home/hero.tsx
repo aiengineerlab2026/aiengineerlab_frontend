@@ -1,9 +1,12 @@
 import { FlaskConical } from "lucide-react";
+import { BrandSwitcher } from "@/app/restaurant/components/brand-switcher";
+import { ThemeSwitcher } from "@/app/restaurant/components/theme-switcher";
+import { GLASS_HEADER } from "@/app/restaurant/lib/header-style";
 
 /** Sticky top navigation header: brand, a live tag and a one-line helper text. */
 export function Hero() {
   return (
-    <header className="sticky top-0 z-30 bg-emerald-700 px-6 py-3 shadow-lg shadow-emerald-900/25">
+    <header className={`${GLASS_HEADER} px-6 py-3`}>
       <div className="mx-auto flex max-w-7xl items-center gap-3">
         <span
           aria-hidden
@@ -18,7 +21,11 @@ export function Hero() {
               AI mini applications
             </span>
           </div>
-          <p className="text-sm text-emerald-100">Explore different AI engineering concepts and features.</p>
+          <p className="text-sm text-white/90">Explore different AI engineering concepts and features.</p>
+        </div>
+        <div className="ml-auto flex items-center gap-3">
+          <BrandSwitcher />
+          <ThemeSwitcher />
         </div>
       </div>
     </header>

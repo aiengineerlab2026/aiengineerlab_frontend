@@ -18,7 +18,7 @@ async function loadApps(): Promise<{ apps: AppInfo[]; error: string | null }> {
 export default async function HomePage() {
   const { apps: registry, error } = await loadApps();
   return (
-    <main className="flex-1">
+    <main className="flex-1 bg-(--paper-sunk)">
       <Hero />
       <Applications apps={registry} error={error} />
     </main>

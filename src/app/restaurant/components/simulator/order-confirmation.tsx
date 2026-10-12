@@ -5,7 +5,7 @@ import type { Order } from "@/app/restaurant/types/api";
 
 export function OrderConfirmation({ order, onDone }: { order: Order; onDone: () => void }) {
   return (
-    <div className="absolute inset-0 z-20 flex flex-col bg-white">
+    <div className="absolute inset-0 z-20 flex flex-col bg-card">
       <div className="flex flex-1 flex-col items-center gap-4 overflow-y-auto px-6 pt-14 pb-4 text-center">
         <CheckCircle2 className="size-16 text-brand" />
         <div>

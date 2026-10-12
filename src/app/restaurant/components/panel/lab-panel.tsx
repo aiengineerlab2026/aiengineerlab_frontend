@@ -27,7 +27,7 @@ export function LabPanel() {
               className={
                 "h-auto flex-none items-center justify-center gap-2 rounded-lg border border-transparent px-4 py-2 text-xs font-medium text-slate-600 " +
                 "cursor-pointer transition-all duration-150 hover:bg-slate-200/50 hover:text-slate-900 " +
-                "data-active:scale-[1.01] data-active:border-slate-200/80 data-active:bg-white data-active:font-semibold data-active:text-slate-900 data-active:shadow-sm " +
+                "data-active:scale-[1.01] data-active:border-slate-200/80 data-active:bg-card data-active:font-semibold data-active:text-slate-900 data-active:shadow-sm " +
                 "[&_svg]:text-slate-400 [&_svg]:transition-colors hover:[&_svg]:text-slate-600 data-active:[&_svg]:text-emerald-600 data-active:hover:[&_svg]:text-emerald-600"
               }
             >

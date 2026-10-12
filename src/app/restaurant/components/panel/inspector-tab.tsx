@@ -48,7 +48,7 @@ export function InspectorTab() {
 // ------------------------------------------------------------------------ shared building blocks
 
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <section className={cn("rounded-xl border border-gray-200 bg-white p-5 shadow-sm", className)}>{children}</section>;
+  return <section className={cn("rounded-xl border border-gray-200 bg-card p-5 shadow-sm", className)}>{children}</section>;
 }
 
 /** Same header on every card of this tab. */
@@ -129,7 +129,7 @@ function ScorePills({ scores, primary }: { scores: Record<string, number>; prima
 function ChunkRow({ chunk, primary }: { chunk: TraceChunk; primary?: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white p-3">
+    <div className="flex items-start gap-3 rounded-lg border border-gray-200 bg-card p-3">
       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-800">
         {chunk.rank}
       </span>
@@ -183,7 +183,7 @@ function StageView({ stage, index }: { stage: TraceStage; index: number }) {
   const [all, setAll] = useState(false);
   const items = all ? stage.items : stage.items.slice(0, 8);
   return (
-    <div className="rounded-lg border border-gray-200 bg-white">
+    <div className="rounded-lg border border-gray-200 bg-card">
       <div className="flex items-center gap-2 pr-3">
         <button
           type="button"
@@ -422,7 +422,7 @@ export function TraceView({
               type="button"
               onClick={copyContext}
               disabled={!trace.context}
-              className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-gray-200 bg-white px-2.5 py-1 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-gray-200 bg-card px-2.5 py-1 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {copied ? <Check className="size-3.5 text-emerald-600" /> : <Copy className="size-3.5" />}
               {copied ? "Copied" : "Copy"}

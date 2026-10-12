@@ -86,7 +86,7 @@ export function CartView({ cart, busy, placing, onSetQuantity, onRemove, onPlace
         ))}
       </div>
 
-      <div className="space-y-3 border-t bg-white p-4">
+      <div className="space-y-3 border-t bg-card p-4">
         <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">Total ({cart?.item_count} items)</span>
           <span className="text-lg font-semibold text-brand-dark">{money(cart?.total ?? 0, currency)}</span>
@@ -98,7 +98,7 @@ export function CartView({ cart, busy, placing, onSetQuantity, onRemove, onPlace
 
       {confirming && (
         <div className="absolute inset-0 z-10 flex items-end bg-black/40">
-          <div className="w-full space-y-3 rounded-t-3xl bg-white p-5">
+          <div className="w-full space-y-3 rounded-t-3xl bg-card p-5">
             <h3 className="text-lg font-semibold">Confirm your order?</h3>
             <p className="text-sm text-muted-foreground">
               {cart?.item_count} items for <strong>{money(cart?.total ?? 0, currency)}</strong>. This is a demo: nothing

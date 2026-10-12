@@ -153,7 +153,7 @@ export function ChatView({ sessionId, dishById, emojiOf, onOpenDish, onAdd, onOr
                       tabIndex={0}
                       onClick={() => onOpenDish(dish)}
                       onKeyDown={(e) => e.key === "Enter" && onOpenDish(dish)}
-                      className="flex cursor-pointer items-center gap-2.5 rounded-xl border bg-white p-2 shadow-xs hover:shadow-md"
+                      className="flex cursor-pointer items-center gap-2.5 rounded-xl border bg-card p-2 shadow-xs hover:shadow-md"
                     >
                       <DishThumb dish={dish} emoji={emojiOf.get(dish.category) ?? "🍽️"} className="size-12 text-xl" />
                       <div className="min-w-0 flex-1">

@@ -19,13 +19,13 @@ interface Props {
 export function DishDetail({ dish, emoji, adding, onClose, onAdd }: Props) {
   const [qty, setQty] = useState(1);
   return (
-    <div className="absolute inset-0 z-20 flex flex-col bg-white">
+    <div className="absolute inset-0 z-20 flex flex-col bg-card">
       <div className="relative">
         <DishThumb dish={dish} emoji={emoji} className="h-52 w-full rounded-none text-7xl" />
         <Button
           variant="secondary"
           size="icon"
-          className="absolute top-8 left-3 rounded-full bg-white/90"
+          className="absolute top-8 left-3 rounded-full bg-card/90"
           onClick={onClose}
           aria-label="Back to menu"
         >

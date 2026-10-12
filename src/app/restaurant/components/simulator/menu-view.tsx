@@ -55,7 +55,7 @@ export function MenuView({ dishes, categories, loading, error, onOpenDish, onAdd
                 "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                 category === name
                   ? "border-brand bg-brand text-white"
-                  : "border-border bg-white text-slate-600 hover:bg-brand-light",
+                  : "border-border bg-card text-slate-600 hover:bg-brand-light",
               )}
             >
               {name !== "All" && <span className="mr-1">{emojiOf.get(name)}</span>}
@@ -80,7 +80,7 @@ export function MenuView({ dishes, categories, loading, error, onOpenDish, onAdd
             onClick={() => onOpenDish(dish)}
             onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onOpenDish(dish)}
             className={cn(
-              "flex cursor-pointer gap-3 rounded-2xl border bg-white p-2.5 text-left shadow-xs transition-shadow hover:shadow-md",
+              "flex cursor-pointer gap-3 rounded-2xl border bg-card p-2.5 text-left shadow-xs transition-shadow hover:shadow-md",
               !dish.available && "opacity-70",
             )}
           >

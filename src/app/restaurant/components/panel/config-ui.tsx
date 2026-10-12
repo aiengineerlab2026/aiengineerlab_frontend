@@ -33,7 +33,7 @@ export function Section({
     <section
       className={cn(
         "rounded-xl border border-gray-200 p-5 shadow-xs sm:p-6",
-        tone === "slate" ? "bg-slate-50" : "bg-white",
+        tone === "slate" ? "bg-slate-50" : "bg-card",
       )}
     >
       <header className="mb-4 flex items-start justify-between gap-3">
@@ -148,7 +148,7 @@ export function CField({
 
 /** Shared look of every text-like control: same height, border, focus ring and disabled state. */
 const CONTROL =
-  "h-9 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-xs transition-colors " +
+  "h-9 w-full rounded-lg border border-gray-300 bg-card px-3 text-sm text-gray-900 shadow-xs transition-colors " +
   "hover:border-gray-400 focus-visible:border-emerald-500 focus-visible:ring-3 focus-visible:ring-emerald-500/20 " +
   "disabled:pointer-events-auto disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-100 " +
   "disabled:text-gray-400 disabled:opacity-100 disabled:shadow-none disabled:hover:border-gray-200";
@@ -245,7 +245,7 @@ export function SliderControl({
     <div
       className={cn(
         "flex h-9 items-center gap-3 rounded-lg border px-3",
-        disabled ? "cursor-not-allowed border-gray-200 bg-gray-100" : "border-gray-300 bg-white shadow-xs",
+        disabled ? "cursor-not-allowed border-gray-200 bg-gray-100" : "border-gray-300 bg-card shadow-xs",
       )}
     >
       <Slider
@@ -288,7 +288,7 @@ export function SwitchControl({
     <div
       className={cn(
         "flex h-9 items-center justify-between rounded-lg border px-3 text-sm",
-        disabled ? "cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400" : "border-gray-300 bg-white text-gray-900 shadow-xs",
+        disabled ? "cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400" : "border-gray-300 bg-card text-gray-900 shadow-xs",
       )}
     >
       <span>{checked ? onText : offText}</span>

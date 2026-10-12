@@ -334,7 +334,7 @@ function ConfigForm({ config, strategies }: { config: RagConfig; strategies: Str
       </Section>
 
       {/* ---------------------------------------------------------------- footer */}
-      <div className="sticky bottom-3 z-10 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur">
+      <div className="sticky bottom-3 z-10 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-card/95 p-3 shadow-lg backdrop-blur">
         {status}
         <span className="hidden text-xs text-gray-500 sm:inline">Edits apply automatically.</span>
         <div className="ml-auto flex items-center gap-2">
@@ -379,7 +379,7 @@ function IndexMeta({ config }: { config: RagConfig }) {
   const building = state === "building" || state === "pending";
 
   return (
-    <div className="space-y-3 rounded-lg border border-gray-200 bg-white p-3">
+    <div className="space-y-3 rounded-lg border border-gray-200 bg-card p-3">
       <div className="flex flex-wrap items-center gap-2">
         <Database className="size-4 text-gray-400" />
         {state === "ready" && (

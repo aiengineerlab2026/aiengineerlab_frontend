@@ -74,7 +74,7 @@ function Panel({
   className?: string;
 }) {
   return (
-    <section className={cn("rounded-xl border border-gray-200 bg-white p-5 shadow-sm", className)}>
+    <section className={cn("rounded-xl border border-gray-200 bg-card p-5 shadow-sm", className)}>
       <header className="mb-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
@@ -153,7 +153,7 @@ function Kpi({ metricKey, value }: { metricKey: string; value: number | null | u
   const m = METRIC_BY_KEY[metricKey];
   const ratio = m.group === "performance" ? null : value;
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-gray-300">
+    <div className="rounded-xl border border-gray-200 bg-card p-4 shadow-sm transition-all hover:border-gray-300">
       <div className="mb-2 flex items-center gap-1 text-xs font-medium text-gray-500">
         {m.label}
         <InfoTip text={m.description} />
@@ -235,7 +235,7 @@ function Trend({ items }: { items: LiveEvaluation[] }) {
       <div className="h-56 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-gray-200)" />
             <XAxis dataKey="n" tick={{ fontSize: 10 }} />
             <YAxis domain={[0, 1]} tick={{ fontSize: 10 }} />
             <ChartTooltip formatter={(v) => (typeof v === "number" ? v.toFixed(3) : String(v))} />
@@ -285,7 +285,7 @@ function ScoreBadge({
   return (
     <div
       className={cn(
-        "rounded-lg border bg-white px-3 py-2 shadow-sm",
+        "rounded-lg border bg-card px-3 py-2 shadow-sm",
         low ? "border-red-200 bg-red-50/60" : "border-slate-200",
       )}
     >
@@ -356,7 +356,7 @@ function Detail({ item, nameOf }: { item: LiveEvaluation; nameOf: (id: string) =
             {showQuery && (
               <div>
                 <SectionLabel>Standalone search query</SectionLabel>
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1 font-mono text-xs text-slate-700 shadow-sm">
+                <span className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-card px-3 py-1 font-mono text-xs text-slate-700 shadow-sm">
                   {item.query}
                 </span>
               </div>
@@ -379,7 +379,7 @@ function Detail({ item, nameOf }: { item: LiveEvaluation; nameOf: (id: string) =
         {/* 2 · relevant vs retrieved */}
         {!unscored && (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <div className="rounded-lg border border-slate-200 bg-white p-3">
+            <div className="rounded-lg border border-slate-200 bg-card p-3">
               <SectionLabel>
                 Relevant dishes ({item.relevant_dish_ids.length})
                 <InfoTip text="No human labelled this question. The judge LLM read the whole menu and listed every dish a perfect answer should contain; Precision/Recall are computed against that list." />
@@ -401,7 +401,7 @@ function Detail({ item, nameOf }: { item: LiveEvaluation; nameOf: (id: string) =
                 )}
               </div>
             </div>
-            <div className="rounded-lg border border-slate-200 bg-white p-3">
+            <div className="rounded-lg border border-slate-200 bg-card p-3">
               <SectionLabel>Retrieved (ranked)</SectionLabel>
               <p className="mb-2 text-[11px] text-slate-400">Green outline: also judged relevant</p>
               <div className="flex flex-wrap items-center gap-1.5">
@@ -438,7 +438,7 @@ function Detail({ item, nameOf }: { item: LiveEvaluation; nameOf: (id: string) =
         {/* 3 · the reply */}
         <div>
           <SectionLabel>Reply the customer saw</SectionLabel>
-          <p className="rounded-r-lg border-l-4 border-emerald-500 bg-white p-4 text-sm leading-relaxed whitespace-pre-wrap text-slate-800 shadow-sm">
+          <p className="rounded-r-lg border-l-4 border-emerald-500 bg-card p-4 text-sm leading-relaxed whitespace-pre-wrap text-slate-800 shadow-sm">
             {item.answer || "(none)"}
           </p>
         </div>
@@ -475,7 +475,7 @@ function Detail({ item, nameOf }: { item: LiveEvaluation; nameOf: (id: string) =
               <ol className="mt-3 space-y-1.5">
                 {item.contexts.map((c, i) => (
                   <li key={i}>
-                    <pre className="max-h-40 overflow-auto rounded-lg border border-slate-200 bg-white p-3 font-mono leading-relaxed whitespace-pre-wrap text-slate-700">
+                    <pre className="max-h-40 overflow-auto rounded-lg border border-slate-200 bg-card p-3 font-mono leading-relaxed whitespace-pre-wrap text-slate-700">
                       {c}
                     </pre>
                   </li>
@@ -491,7 +491,7 @@ function Detail({ item, nameOf }: { item: LiveEvaluation; nameOf: (id: string) =
 
 // Table of the questions asked. Spacing/zebra/sizing refinements sit behind `lg:` so narrow layouts keep the compact look.
 const FEED_TH =
-  "sticky top-0 z-10 bg-white px-3 py-3 text-center text-xs font-medium whitespace-nowrap text-slate-600 shadow-sm transition-colors hover:bg-slate-50 lg:px-4";
+  "sticky top-0 z-10 bg-card px-3 py-3 text-center text-xs font-medium whitespace-nowrap text-slate-600 shadow-sm transition-colors hover:bg-slate-50 lg:px-4";
 const FEED_TD = "border-b border-slate-100 px-3 py-3 align-middle lg:px-4 lg:py-4";
 
 /** One metric value: tabular mono digits, centered; a score below the threshold gets a light red pill. */
@@ -785,7 +785,7 @@ export function LiveEvaluationView() {
   return (
     <div className="space-y-6">
       {/* ------------------------------------------------------------ status */}
-      <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+      <section className="rounded-xl border border-gray-200 bg-card p-5 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <Play className="size-4 text-emerald-600" />
           <h3 className="text-sm font-semibold text-gray-900">Evaluation</h3>
