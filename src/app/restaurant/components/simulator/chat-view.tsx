@@ -73,7 +73,7 @@ function UsageNotice({ usage }: { usage: ChatUsage }) {
 export function ChatView({ sessionId, dishById, emojiOf, onOpenDish, onAdd, onOrderPlaced }: Props) {
   const qc = useQueryClient();
   const inspect = useLabStore((s) => s.inspect);
-  const setPanelTab = useLabStore((s) => s.setPanelTab);
+  const openPanel = useLabStore((s) => s.openPanel);
   const [draft, setDraft] = useState("");
   const [pendingText, setPendingText] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -190,7 +190,7 @@ export function ChatView({ sessionId, dishById, emojiOf, onOpenDish, onAdd, onOr
                       source: "chat",
                       label: list[list.indexOf(m) - 1]?.content ?? trace.query,
                     });
-                    setPanelTab("inspector");
+                    openPanel("inspector");
                   }}
                 >
                   <Microscope className="size-3" /> Inspect retrieval

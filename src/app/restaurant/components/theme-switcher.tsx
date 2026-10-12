@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
 import { THEME_STORAGE_KEY as STORAGE_KEY } from "@/app/restaurant/lib/init-script";
+import { GLASS_BUTTON } from "@/app/restaurant/lib/header-style";
 import { cn } from "@/app/restaurant/lib/utils";
 
 const listeners = new Set<() => void>();
@@ -31,10 +32,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
       onClick={toggle}
       aria-label={label}
       title={label}
-      className={cn(
-        "inline-flex size-8 cursor-pointer items-center justify-center rounded-lg border border-white/30 bg-white/15 text-white transition-[transform,background-color] duration-100 hover:translate-y-px hover:bg-white/25 active:translate-y-px focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none",
-        className,
-      )}
+      className={cn(GLASS_BUTTON, className)}
     >
       {dark ? <Sun className="size-4" /> : <Moon className="size-4" />}
     </button>

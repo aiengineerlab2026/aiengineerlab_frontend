@@ -130,7 +130,7 @@ function PlaceholderCard({ className }: { className?: string }) {
 export function Applications({ apps, error }: { apps: AppInfo[]; error: string | null }) {
   const placeholders = Math.max(0, COLUMNS - apps.length);
   return (
-    <section className="mx-auto max-w-7xl px-6 py-10">
+    <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
       <h2 className="mb-6 flex items-center gap-2 text-xs font-bold tracking-wider text-(color:--ink-mute) uppercase">
         <Layers className="size-3.5" /> Applications
       </h2>
