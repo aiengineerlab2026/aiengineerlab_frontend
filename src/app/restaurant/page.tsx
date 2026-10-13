@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { ExperimentPanel } from "@/app/restaurant/components/experiment-panel";
 import { HeaderControls } from "@/app/restaurant/components/header-controls";
 import { GithubIcon } from "@/app/restaurant/components/github-icon";
 import { LabPanel } from "@/app/restaurant/components/panel/lab-panel";
@@ -10,6 +11,23 @@ import { RESTAURANT_GITHUB_URL } from "@/app/restaurant/lib/links";
 import { RestaurantSimulator } from "@/app/restaurant/components/simulator/restaurant-simulator";
 
 export const metadata: Metadata = { title: "The Restaurant · AI Engineer Lab" };
+
+const EXPERIMENT = {
+  title: "RAG Retrieval Strategies: Compare and Evaluate",
+  target: (
+    <>
+      Explore how different retrieval strategies—<strong>Vector Search, Multi-Query Retrieval, and Hybrid Search</strong>—affect RAG performance. Use <strong>RAGAS evaluation metrics</strong> to compare retrieval quality and AI-generated responses.
+    </>
+  ),
+  stepSeparator: ": ",
+  steps: [
+    { name: "Vector Search", text: "Select Vector Search, ask the restaurant chatbot a food-related question, and review the RAGAS evaluation results." },
+    { name: "Multi-Query Retrieval", text: "Switch to Multi-Query, ask the same question, and observe how generating multiple queries affects the evaluation scores." },
+    { name: "Hybrid Search", text: "Select Hybrid Search (Vector + BM25 + RRF), repeat the same question, and review its RAGAS scores." },
+    { name: "Compare Results", text: "Compare Context Precision, Context Recall, Faithfulness, and Answer Relevancy across all three strategies to identify which performs best." },
+  ],
+  outcome: "Understand how retrieval strategy selection influences the relevance of retrieved information and the quality of RAG-generated answers.",
+};
 
 export default function RestaurantLabPage() {
   return (
@@ -41,15 +59,18 @@ export default function RestaurantLabPage() {
         </div>
       </header>
 
-      <main className="mx-auto grid w-full max-w-[1500px] flex-1 grid-cols-[minmax(0,1fr)] gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start">
-        {/* ~40%: the mobile app being tuned */}
-        <section aria-label="Restaurant mobile app simulator" className="min-w-0 lg:sticky lg:top-[4.5rem]">
-          <RestaurantSimulator />
-        </section>
-        {/* ~60%: tuning panel (a bottom sheet opened from a floating button on phones) */}
-        <LabPanelSheet>
-          <LabPanel />
-        </LabPanelSheet>
+      <main className="mx-auto w-full max-w-[1500px] flex-1 space-y-6 px-4 py-6 sm:px-6">
+        <ExperimentPanel {...EXPERIMENT} />
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start">
+          {/* ~40%: the mobile app being tuned */}
+          <section aria-label="Restaurant mobile app simulator" className="min-w-0 lg:sticky lg:top-[4.5rem]">
+            <RestaurantSimulator />
+          </section>
+          {/* ~60%: tuning panel (a bottom sheet opened from a floating button on phones) */}
+          <LabPanelSheet>
+            <LabPanel />
+          </LabPanelSheet>
+        </div>
       </main>
     </div>
   );

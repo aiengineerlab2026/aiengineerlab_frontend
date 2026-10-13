@@ -7,6 +7,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/restaurant/compon
 import { appIcon } from "@/app/restaurant/lib/app-icons";
 import { API_BASE_URL } from "@/app/restaurant/lib/client";
 import { RESTAURANT_GITHUB_URL } from "@/app/restaurant/lib/links";
+import { MYRESUME_GITHUB_URL } from "@/app/myresume/lib/links";
 import { cn } from "@/app/restaurant/lib/utils";
 import type { AppInfo } from "@/app/restaurant/types/api";
 
@@ -14,10 +15,10 @@ import type { AppInfo } from "@/app/restaurant/types/api";
 const LOGOS: Record<string, string> = { restaurant: "/restaurant-logo.jpg" };
 
 /** Where each app lives in this frontend; takes precedence over the route the backend reports (older backends say /apps/restaurant). */
-const ROUTES: Record<string, string> = { restaurant: "/restaurant" };
+const ROUTES: Record<string, string> = { restaurant: "/restaurant", myresume: "/myresume" };
 
 /** Source repository per app id (the URLs come from env, see lib/links.ts). */
-const GITHUB_URLS: Record<string, string | undefined> = { restaurant: RESTAURANT_GITHUB_URL };
+const GITHUB_URLS: Record<string, string | undefined> = { restaurant: RESTAURANT_GITHUB_URL, myresume: MYRESUME_GITHUB_URL };
 
 /** Grid columns on large screens; placeholders fill the last row so a single app doesn't look lost. */
 const COLUMNS = 3;

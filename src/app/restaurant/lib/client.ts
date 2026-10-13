@@ -40,8 +40,9 @@ export async function api<T>(path: string, opts: RequestOptions = {}): Promise<T
   try {
     res = await fetch(buildUrl(path, opts.query), {
       method: opts.method ?? "GET",
-      headers: opts.body === undefined ? undefined : { "Content-Type": "application/json" },
-      body: opts.body === undefined ? undefined : JSON.stringify(opts.body),
+      // FormData (file uploads) sets its own multipart Content-Type, with the boundary, so it must be left alone.
+      headers: opts.body === undefined || opts.body instanceof FormData ? undefined : { "Content-Type": "application/json" },
+      body: opts.body === undefined ? undefined : opts.body instanceof FormData ? opts.body : JSON.stringify(opts.body),
       signal: opts.signal,
       cache: "no-store",
     });

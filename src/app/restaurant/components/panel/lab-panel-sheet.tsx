@@ -12,7 +12,14 @@ const DESKTOP = "(min-width: 1024px)";
  * Below that it becomes a bottom sheet over the page, opened from a floating button at the bottom right.
  * The same element is used in both modes (CSS only), so the panel is mounted once and keeps its unsaved edits.
  */
-export function LabPanelSheet({ children }: { children: React.ReactNode }) {
+export function LabPanelSheet({
+  children,
+  openLabel = "Open the lab panel: configuration, retrieval inspector and evaluation",
+}: {
+  children: React.ReactNode;
+  /** Accessible name of the floating button, naming the tabs of the lab this panel belongs to. */
+  openLabel?: string;
+}) {
   const open = useLabStore((s) => s.panelOpen);
   const setOpen = useLabStore((s) => s.setPanelOpen);
 
@@ -41,7 +48,7 @@ export function LabPanelSheet({ children }: { children: React.ReactNode }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        aria-label="Open the lab panel: configuration, retrieval inspector and evaluation"
+        aria-label={openLabel}
         className={cn(
           "fixed right-4 bottom-4 z-40 inline-flex items-center gap-2 rounded-full bg-(--brand) px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-black/25 transition-[transform,background-color] duration-100 hover:bg-(--brand-hover) active:translate-y-px focus-visible:ring-2 focus-visible:ring-(--brand) focus-visible:ring-offset-2 focus-visible:outline-none lg:hidden",
           open && "hidden",
