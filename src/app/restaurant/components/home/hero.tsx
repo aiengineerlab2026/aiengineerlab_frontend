@@ -1,4 +1,5 @@
-import { FlaskConical } from "lucide-react";
+import Link from "next/link";
+import { FlaskConical, Newspaper } from "lucide-react";
 import { HeaderControls } from "@/app/restaurant/components/header-controls";
 import { GLASS_HEADER } from "@/app/restaurant/lib/header-style";
 
@@ -23,7 +24,17 @@ export function Hero() {
             AI mini applications
           </span>
         </div>
-        <HeaderControls className="sm:row-span-2" />
+        <div className="flex items-center gap-3 sm:row-span-2">
+          <Link
+            href="/articles"
+            aria-label="Articles"
+            className="inline-flex size-8 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-white/30 bg-white/15 text-xs font-semibold text-white backdrop-blur-sm transition-[transform,background-color] duration-100 hover:translate-y-px hover:bg-white/25 active:translate-y-px focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:outline-none sm:size-auto sm:px-3 sm:py-1.5"
+          >
+            <Newspaper className="size-4 sm:size-3.5" />
+            <span className="hidden sm:inline">Articles</span>
+          </Link>
+          <HeaderControls />
+        </div>
         <p className="col-span-3 text-xs text-white/90 sm:col-span-1 sm:col-start-2 sm:text-sm">
           Explore different AI engineering concepts and features.
         </p>

@@ -24,6 +24,8 @@ interface RequestOptions {
   body?: unknown;
   query?: Query;
   signal?: AbortSignal;
+  /** Admin login token, sent as a bearer token. */
+  token?: string | null;
 }
 
 function buildUrl(path: string, query?: Query): string {
@@ -41,7 +43,10 @@ export async function api<T>(path: string, opts: RequestOptions = {}): Promise<T
     res = await fetch(buildUrl(path, opts.query), {
       method: opts.method ?? "GET",
       // FormData (file uploads) sets its own multipart Content-Type, with the boundary, so it must be left alone.
-      headers: opts.body === undefined || opts.body instanceof FormData ? undefined : { "Content-Type": "application/json" },
+      headers: {
+        ...(opts.body === undefined || opts.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
+        ...(opts.token ? { Authorization: `Bearer ${opts.token}` } : {}),
+      },
       body: opts.body === undefined ? undefined : opts.body instanceof FormData ? opts.body : JSON.stringify(opts.body),
       signal: opts.signal,
       cache: "no-store",
