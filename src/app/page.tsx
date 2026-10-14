@@ -1,5 +1,5 @@
 import { Applications } from "@/app/restaurant/components/home/applications";
-import { Hero } from "@/app/restaurant/components/home/hero";
+import { SiteHeader } from "@/app/restaurant/components/site-header";
 import { errorMessage } from "@/app/restaurant/lib/client";
 import { apps } from "@/app/restaurant/lib/endpoints";
 import type { AppInfo } from "@/app/restaurant/types/api";
@@ -19,7 +19,8 @@ export default async function HomePage() {
   const { apps: registry, error } = await loadApps();
   return (
     <main className="flex-1 bg-(--paper-sunk)">
-      <Hero />
+      <SiteHeader />
+      <h1 className="sr-only">AI Engineer Lab</h1>
       <Applications apps={registry} error={error} />
     </main>
   );

@@ -8,7 +8,8 @@ export const metadata: Metadata = { title: "Edit article · AI Engineer Lab", ro
 export default async function EditArticlePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   return (
-    <PageShell title="Edit article" wide>
+    <PageShell wide>
+      <h1 className="mb-5 text-2xl font-bold tracking-tight">Edit article</h1>
       <RequireAdmin>
         <EditArticle id={id} />
       </RequireAdmin>

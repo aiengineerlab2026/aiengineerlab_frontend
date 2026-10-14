@@ -132,9 +132,10 @@ export function Applications({ apps, error }: { apps: AppInfo[]; error: string |
   const placeholders = Math.max(0, COLUMNS - apps.length);
   return (
     <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
-      <h2 className="mb-6 flex items-center gap-2 text-xs font-bold tracking-wider text-(color:--ink-mute) uppercase">
+      <h2 className="mb-2 flex items-center gap-2 text-xs font-bold tracking-wider text-(color:--ink-mute) uppercase">
         <Layers className="size-3.5" /> Applications
       </h2>
+      <p className="mb-6 text-sm text-(color:--ink-mute)">Explore different AI engineering concepts and features.</p>
 
       {error ? (
         <div className="max-w-xl rounded-2xl border border-red-200 bg-red-50/50 p-6">

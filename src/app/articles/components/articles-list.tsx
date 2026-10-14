@@ -45,7 +45,7 @@ export function ArticlesList() {
   return (
     <section aria-label="Articles" className="space-y-5">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="text-2xl font-bold tracking-tight">Articles</h2>
+        <h1 className="text-2xl font-bold tracking-tight">Articles</h1>
         {token && (
           <Button size="lg" className="bg-(--brand) text-white hover:bg-(--brand-hover)" render={<Link href="/articles/new" />} nativeButton={false}>
             <Plus /> Add article

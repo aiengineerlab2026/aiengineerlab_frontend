@@ -1,12 +1,17 @@
 "use client";
 
 import { EditorContent, useEditor, useEditorState, type Editor } from "@tiptap/react";
+import Image from "@tiptap/extension-image";
 import StarterKit from "@tiptap/starter-kit";
+import type { EditorView } from "@tiptap/pm/view";
+import { useRef } from "react";
+import { toast } from "sonner";
 import {
   Bold,
   Code2,
   Heading2,
   Heading3,
+  ImagePlus,
   Italic,
   Link2,
   List,
@@ -19,7 +24,9 @@ import {
   Undo2,
   type LucideIcon,
 } from "lucide-react";
+import { errorMessage } from "@/app/restaurant/lib/client";
 import { cn } from "@/app/restaurant/lib/utils";
+import { imageFiles, imageToDataUrl } from "@/app/articles/lib/images";
 
 function ToolButton({ label, icon: Icon, active, disabled, onClick }: {
   label: string;
@@ -59,7 +66,23 @@ function setLink(editor: Editor) {
   else chain.setLink({ href: url.trim() }).run();
 }
 
+/** Shrinks each image and puts it into the document: at `pos` when given (a drop), else at the cursor (a paste). */
+async function insertImages(view: EditorView, files: File[], pos?: number) {
+  for (const file of files) {
+    try {
+      const src = await imageToDataUrl(file);
+      const node = view.state.schema.nodes.image.create({ src, alt: file.name.replace(/\.[^.]+$/, "") });
+      const at = pos ?? view.state.selection.to;
+      view.dispatch(view.state.tr.insert(Math.min(at, view.state.doc.content.size), node).scrollIntoView());
+      pos = undefined; // the next pictures follow the cursor
+    } catch (e) {
+      toast.error(errorMessage(e));
+    }
+  }
+}
+
 function Toolbar({ editor }: { editor: Editor }) {
+  const picker = useRef<HTMLInputElement>(null);
   const s = useEditorState({
     editor,
     selector: ({ editor: e }) => ({
@@ -96,6 +119,18 @@ function Toolbar({ editor }: { editor: Editor }) {
       <ToolButton label="Code block" icon={Code2} active={s.code} onClick={() => run().toggleCodeBlock().run()} />
       <ToolButton label="Link" icon={Link2} active={s.link} onClick={() => setLink(editor)} />
       <ToolButton label="Divider line" icon={Minus} onClick={() => run().setHorizontalRule().run()} />
+      <ToolButton label="Insert image" icon={ImagePlus} onClick={() => picker.current?.click()} />
+      <input
+        ref={picker}
+        type="file"
+        accept="image/png,image/jpeg,image/gif,image/webp"
+        multiple
+        hidden
+        onChange={(e) => {
+          void insertImages(editor.view, imageFiles(e.target.files));
+          e.target.value = ""; // the same file can be picked again
+        }}
+      />
       <Divider />
       <ToolButton label="Undo" icon={Undo2} disabled={!s.canUndo} onClick={() => run().undo().run()} />
       <ToolButton label="Redo" icon={Redo2} disabled={!s.canRedo} onClick={() => run().redo().run()} />
@@ -111,11 +146,35 @@ export function RichTextEditor({ initialContent, onChange }: { initialContent: s
         heading: { levels: [2, 3] },
         link: { openOnClick: false, autolink: true, protocols: ["http", "https", "mailto"] },
       }),
+      // click a picture to select it: the corner handles resize it (the ratio stays locked), Delete removes it
+      Image.configure({
+        allowBase64: true,
+        resize: {
+          enabled: true,
+          directions: ["top-left", "top-right", "bottom-left", "bottom-right"],
+          minWidth: 60,
+          minHeight: 40,
+          alwaysPreserveAspectRatio: true,
+        },
+      }),
     ],
     content: initialContent,
     immediatelyRender: false, // the page is server-rendered first
     onUpdate: ({ editor: e }) => onChange(e.isEmpty ? "" : e.getHTML()),
     editorProps: {
+      // pictures from the clipboard (a screenshot, "Copy image" on a web page) and files dropped onto the editor
+      handlePaste: (view, event) => {
+        const files = imageFiles(event.clipboardData?.files);
+        if (files.length === 0) return false;
+        void insertImages(view, files);
+        return true;
+      },
+      handleDrop: (view, event, _slice, moved) => {
+        const files = imageFiles(event.dataTransfer?.files);
+        if (moved || files.length === 0) return false;
+        void insertImages(view, files, view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos);
+        return true;
+      },
       attributes: {
         class: "article-body min-h-[320px] px-4 py-3 outline-none",
         role: "textbox",

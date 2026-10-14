@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Article · AI Engineer Lab" };
 export default async function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   return (
-    <PageShell title="Articles">
+    <PageShell>
       <ArticleView id={id} />
     </PageShell>
   );

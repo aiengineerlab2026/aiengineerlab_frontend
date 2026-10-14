@@ -7,7 +7,8 @@ export const metadata: Metadata = { title: "Add article · AI Engineer Lab", rob
 
 export default function NewArticlePage() {
   return (
-    <PageShell title="Add article" wide>
+    <PageShell wide>
+      <h1 className="mb-5 text-2xl font-bold tracking-tight">Add article</h1>
       <RequireAdmin>
         <ArticleForm />
       </RequireAdmin>

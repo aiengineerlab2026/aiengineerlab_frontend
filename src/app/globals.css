@@ -433,6 +433,8 @@ html.dark[data-brand="red"] {
   .article-body h3 { font-size: 1.15rem; }
   .article-body ul { list-style: disc; padding-left: 1.5rem; }
   .article-body ol { list-style: decimal; padding-left: 1.5rem; }
+  /* An empty line added in the editor is a bare <p></p> in the saved HTML, which would collapse to nothing when read. */
+  .article-body p:empty { min-height: 1.75em; }
   .article-body li > p { margin: 0; }
   .article-body li + li { margin-top: 0.25em; }
   .article-body blockquote { border-left: 4px solid var(--brand); padding-left: 1rem; color: var(--muted-foreground); font-style: italic; }
@@ -440,6 +442,24 @@ html.dark[data-brand="red"] {
   .article-body code { background: var(--muted); border-radius: 0.3rem; padding: 0.1em 0.35em; font-family: var(--font-geist-mono), monospace; font-size: 0.9em; }
   .article-body pre { background: var(--muted); border-radius: 0.6rem; padding: 0.85rem 1rem; overflow-x: auto; }
   .article-body pre code { background: none; padding: 0; }
+  .article-body img { display: block; max-width: 100%; height: auto; border-radius: 0.6rem; }
+  /* Editor only: the handles of a selected picture (the editor wraps it in [data-resize-container]). */
+  .article-body [data-resize-container].ProseMirror-selectednode img { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .article-body [data-resize-handle] {
+    display: none;
+    width: 12px;
+    height: 12px;
+    z-index: 2;
+    border: 2px solid #fff;
+    border-radius: 3px;
+    background: var(--brand);
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.25);
+  }
+  .article-body .ProseMirror-selectednode [data-resize-handle] { display: block; }
+  .article-body [data-resize-handle="top-left"] { transform: translate(-50%, -50%); cursor: nwse-resize; }
+  .article-body [data-resize-handle="bottom-right"] { transform: translate(50%, 50%); cursor: nwse-resize; }
+  .article-body [data-resize-handle="top-right"] { transform: translate(50%, -50%); cursor: nesw-resize; }
+  .article-body [data-resize-handle="bottom-left"] { transform: translate(-50%, 50%); cursor: nesw-resize; }
   .article-body hr { border: 0; border-top: 1px solid var(--border); margin: 1.5em 0; }
   .article-body p.is-editor-empty:first-child::before {
     content: attr(data-placeholder);

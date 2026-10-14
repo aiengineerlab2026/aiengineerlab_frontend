@@ -62,7 +62,7 @@ function subscribe(listener: () => void): () => void {
 
 /** Where this visitor is in the guide of `project`; "done" on the server, so nothing flashes before hydration. */
 function useGuideState(project: string): GuideState {
-  return useSyncExternalStore(subscribe, () => read(project), () => "done");
+  return useSyncExternalStore<GuideState>(subscribe, () => read(project), () => "done");
 }
 
 const DESKTOP = "(min-width: 1024px)";

@@ -8,8 +8,9 @@ import { Button } from "@/app/restaurant/components/ui/button";
 import { Skeleton } from "@/app/restaurant/components/ui/skeleton";
 import { ApiError, errorMessage } from "@/app/restaurant/lib/client";
 import { DeleteArticleDialog } from "@/app/articles/components/delete-article-dialog";
-import { formatDate } from "@/app/articles/components/format";
+import { formatDate, withVisibleBreaks } from "@/app/articles/components/format";
 import { useArticle } from "@/app/articles/hooks/use-articles";
+import { ImageLightbox } from "@/app/articles/components/image-lightbox";
 import { useToken } from "@/app/articles/lib/auth";
 
 export function ArticleView({ id }: { id: string }) {
@@ -17,6 +18,7 @@ export function ArticleView({ id }: { id: string }) {
   const router = useRouter();
   const { data, isPending, error } = useArticle(id);
   const [deleting, setDeleting] = useState(false);
+  const [zoomed, setZoomed] = useState<{ src: string; alt: string } | null>(null);
 
   return (
     <article className="space-y-6">
@@ -56,7 +58,15 @@ export function ArticleView({ id }: { id: string }) {
             )}
           </header>
           {/* Sanitised by the backend before it is stored (see backend/app/articles/sanitize.py). */}
-          <div className="article-body" dangerouslySetInnerHTML={{ __html: data.content }} />
+          <div
+            className="article-body [&_img]:cursor-zoom-in"
+            onClick={(e) => {
+              const img = e.target instanceof HTMLImageElement ? e.target : null;
+              if (img) setZoomed({ src: img.currentSrc || img.src, alt: img.alt });
+            }}
+            dangerouslySetInnerHTML={{ __html: withVisibleBreaks(data.content) }}
+          />
+          <ImageLightbox src={zoomed?.src ?? null} alt={zoomed?.alt ?? ""} onClose={() => setZoomed(null)} />
           <DeleteArticleDialog id={id} title={data.title} open={deleting} onOpenChange={setDeleting} onDeleted={() => router.replace("/articles")} />
         </>
       )}

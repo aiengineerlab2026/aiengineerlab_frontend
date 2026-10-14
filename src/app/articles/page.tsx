@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Articles · AI Engineer Lab" };
 
 export default function ArticlesPage() {
   return (
-    <PageShell title="Articles">
+    <PageShell>
       <ArticlesList />
     </PageShell>
   );
