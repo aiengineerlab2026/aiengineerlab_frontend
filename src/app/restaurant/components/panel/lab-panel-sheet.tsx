@@ -35,11 +35,11 @@ export function LabPanelSheet({
     };
     sync();
     mq.addEventListener("change", sync);
-    window.addEventListener("keydown", onKey);
+    window.addEventListener("keydown", onKey, true); // capture: popovers (the first-visit guide) swallow Escape before it bubbles up
     return () => {
       document.body.style.overflow = "";
       mq.removeEventListener("change", sync);
-      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("keydown", onKey, true);
     };
   }, [open, setOpen]);
 

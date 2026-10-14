@@ -1,7 +1,8 @@
 "use client";
 
 import { BarChart3, Microscope, SlidersHorizontal } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/restaurant/components/ui/tabs";
+import { GuidedTabsTrigger } from "@/app/restaurant/components/panel/tab-guide";
+import { Tabs, TabsContent, TabsList } from "@/app/restaurant/components/ui/tabs";
 import { useLabStore, type PanelTab } from "@/app/restaurant/stores/lab-store";
 import { ConfigurationTab } from "./configuration-tab";
 import { LiveEvaluationView } from "./live-evaluation";
@@ -21,8 +22,10 @@ export function LabPanel() {
       <div className="mb-5 max-w-full overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <TabsList className="inline-flex h-auto w-full items-center sm:min-w-max justify-start gap-1 rounded-xl border border-slate-200/80 bg-slate-100/80 p-1.5 shadow-inner max-sm:gap-0.5 max-sm:p-1 group-data-horizontal/tabs:h-auto sm:w-auto">
           {TABS.map(({ id, label, icon: Icon }) => (
-            <TabsTrigger
+            <GuidedTabsTrigger
               key={id}
+              project="restaurant"
+              guide={id}
               value={id}
               className={
                 "h-auto flex-1 items-center justify-center gap-2 rounded-lg border border-transparent px-4 py-2 text-xs font-medium text-slate-600 max-sm:min-w-0 max-sm:flex-col max-sm:gap-1 max-sm:px-1 max-sm:text-[11px] max-sm:leading-tight max-sm:whitespace-normal max-sm:text-center sm:flex-none " +
@@ -33,7 +36,7 @@ export function LabPanel() {
             >
               <Icon className="size-4 shrink-0" />
               {label}
-            </TabsTrigger>
+            </GuidedTabsTrigger>
           ))}
         </TabsList>
       </div>

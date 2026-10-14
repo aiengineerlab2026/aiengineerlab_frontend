@@ -1,7 +1,8 @@
 "use client";
 
 import { BarChart3, SlidersHorizontal } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/restaurant/components/ui/tabs";
+import { GuidedTabsTrigger } from "@/app/restaurant/components/panel/tab-guide";
+import { Tabs, TabsContent, TabsList } from "@/app/restaurant/components/ui/tabs";
 import { useLab, type PanelTab } from "@/app/myresume/stores/lab-store";
 import { ConfigurationTab } from "./configuration-tab";
 import { EvaluationTab } from "./evaluation-tab";
@@ -20,8 +21,10 @@ export function MyResumePanel() {
       <div className="mb-5 max-w-full overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <TabsList className="inline-flex h-auto w-full items-center justify-start gap-1 rounded-xl border border-slate-200/80 bg-slate-100/80 p-1.5 shadow-inner group-data-horizontal/tabs:h-auto sm:w-auto">
           {TABS.map(({ id, label, icon: Icon }) => (
-            <TabsTrigger
+            <GuidedTabsTrigger
               key={id}
+              project="myresume"
+              guide={id}
               value={id}
               className={
                 "h-auto flex-1 items-center justify-center gap-2 rounded-lg border border-transparent px-4 py-2 text-xs font-medium text-slate-600 sm:flex-none " +
@@ -32,7 +35,7 @@ export function MyResumePanel() {
             >
               <Icon className="size-4 shrink-0" />
               {label}
-            </TabsTrigger>
+            </GuidedTabsTrigger>
           ))}
         </TabsList>
       </div>
