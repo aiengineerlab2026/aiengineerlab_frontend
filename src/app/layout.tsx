@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/app/restaurant/components/providers";
 import { INIT_SCRIPT } from "@/app/restaurant/lib/init-script";
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body suppressHydrationWarning className="flex min-h-full flex-col">
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   );
