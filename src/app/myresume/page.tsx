@@ -10,7 +10,7 @@ import { ResumeMatcher } from "@/app/myresume/components/matcher/resume-matcher"
 import { MyResumePanel } from "@/app/myresume/components/panel/my-resume-panel";
 import { MYRESUME_GITHUB_URL } from "@/app/myresume/lib/links";
 
-export const metadata: Metadata = { title: "My Resume · AI Engineer Lab" };
+export const metadata: Metadata = { title: "Test Resume Job Matcher · AI Engineer Lab" };
 
 export default function MyResumeLabPage() {
   return (
@@ -25,7 +25,7 @@ export default function MyResumeLabPage() {
             <ArrowLeft className="size-5 sm:size-4" /> <span className="hidden sm:inline">AI Engineer Lab</span>
           </Link>
           <span className="hidden text-white/40 sm:inline">/</span>
-          <h1 className="min-w-0 truncate text-sm font-semibold text-white">My Resume</h1>
+          <h1 className="min-w-0 truncate text-sm font-semibold text-white">Test Resume Job Matcher</h1>
           <HeaderControls className="ml-auto" />
           {MYRESUME_GITHUB_URL && (
             <a
