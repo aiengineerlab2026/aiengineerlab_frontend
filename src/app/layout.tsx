@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import NextTopLoader from "nextjs-toploader";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/app/restaurant/components/providers";
 import { INIT_SCRIPT } from "@/app/restaurant/lib/init-script";
@@ -28,6 +29,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: INIT_SCRIPT }} />
       </head>
       <body suppressHydrationWarning className="flex min-h-full flex-col">
+        {/* The thin line along the top edge while a page loads; white because the header it runs over is brand green. */}
+        <NextTopLoader color="#ffffff" height={3} showSpinner={false} shadow="0 0 10px rgb(255 255 255 / 0.9)" zIndex={2000} />
         <Providers>{children}</Providers>
         <Analytics />
       </body>
