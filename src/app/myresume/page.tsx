@@ -12,27 +12,6 @@ import { MYRESUME_GITHUB_URL } from "@/app/myresume/lib/links";
 
 export const metadata: Metadata = { title: "My Resume · AI Engineer Lab" };
 
-const EXPERIMENT = {
-  title: "BM25 vs Vector Search vs Hybrid: Which Retrieves Better Job Matches?",
-  target: (
-    <>
-      Demonstrate how <strong>BM25 can outperform semantic vector search</strong> when exact keyword matching matters, and explore whether Hybrid Search improves retrieval quality.
-    </>
-  ),
-  steps: [
-    { name: "Upload Your Resume", text: "Upload a PDF resume to find matching jobs." },
-    { name: "Test Vector Search", text: "Explore jobs retrieved through semantic similarity." },
-    { name: "Test BM25", text: "Compare results using keyword-based matching." },
-    { name: "Test Hybrid Search", text: "Observe how combining BM25 and Vector Search using RRF affects rankings." },
-    { name: "Evaluate Performance", text: "Compare Precision@K, Recall@K, NDCG@K, and retrieval latency across all three methods." },
-  ],
-  outcome: (
-    <>
-      Understand the strengths and limitations of each retrieval strategy and discover why <strong>semantic similarity doesn&apos;t always mean better retrieval accuracy</strong>.
-    </>
-  ),
-};
-
 export default function MyResumeLabPage() {
   return (
     <div className="flex flex-1 flex-col">
@@ -64,7 +43,7 @@ export default function MyResumeLabPage() {
       </header>
 
       <main className="mx-auto w-full max-w-[1500px] flex-1 space-y-6 px-4 py-6 sm:px-6">
-        <ExperimentPanel {...EXPERIMENT} />
+        <ExperimentPanel title="BM25 vs Vector Search vs Hybrid: Which Retrieves Better Job Matches?" />
         <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-2 lg:items-start">
           <section aria-label="Resume matcher" className="min-w-0">
             <ResumeMatcher />
