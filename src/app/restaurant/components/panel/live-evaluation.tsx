@@ -36,7 +36,7 @@ import { keys, useMenu } from "@/app/restaurant/hooks/use-restaurant";
 import { useRagConfig } from "@/app/restaurant/hooks/use-rag-config";
 import { errorMessage } from "@/app/restaurant/lib/client";
 import { evaluations } from "@/app/restaurant/lib/endpoints";
-import { configLabel, dateTime, ms, score, titleCase } from "@/app/restaurant/lib/format";
+import { configLabel, dateTime, ms, score } from "@/app/restaurant/lib/format";
 import { METRIC_BY_KEY, POOR_THRESHOLD, formatMetric } from "@/app/restaurant/lib/metrics";
 import { cn } from "@/app/restaurant/lib/utils";
 import type {
@@ -50,6 +50,7 @@ import type {
 import { Pill } from "./config-ui";
 import { InfoTip } from "./fields";
 import { LoadingOverlay } from "./loading-overlay";
+import { EvaluationProgress, ScoringPercent, ScoringProgress } from "./scoring-progress";
 
 const RETRIEVAL_KEYS = ["precision_at_5", "recall_at_5", "precision_at_10", "recall_at_10"];
 /** LLM-free RAGAS metrics, scored against the index chunks that cover the judged-relevant dishes. */
@@ -597,7 +598,7 @@ function Feed({ items }: { items: LiveEvaluation[] }) {
                       ) : (
                         <StatusBadge status={i.status} />
                       )}
-                      {isScoring(i) && <span className="text-[11px] text-slate-400">{titleCase(i.stage)}</span>}
+                      {isScoring(i) && <ScoringProgress key={i.stage} stage={i.stage} />}
                     </div>
                   </td>
                   <MetricCell v={i.retrieval_metrics.precision_at_5} warn={false} loading={retrievalPending(i)} />
@@ -780,6 +781,7 @@ export function LiveEvaluationView() {
 
   const { enabled, summary, usage } = live.data;
   const inFlight = summary.pending + summary.running;
+  const mine = rows.filter(isScoring); // this browser's questions being scored right now (the feed also holds other visitors')
   const scored = summary.completed + summary.failed;
   const hasMetrics = Object.values(summary.metrics).some((v) => v !== null);
   const isActive = (g: (typeof summary.by_config)[number]) =>
@@ -843,6 +845,10 @@ export function LiveEvaluationView() {
           </button>
         </div>
 
+        {mine.map((i) => (
+          <EvaluationProgress key={`${i.id}-${i.stage}`} question={i.question} stage={i.stage} />
+        ))}
+
         <p className="mt-4 text-xs leading-relaxed text-gray-500">
           Ask the assistant for recommendations, then press <strong>Evaluate last question</strong> to score the most
           recent question asked in this browser. Nothing is scored while you chat. The questions, replies and retrieved context are read from
@@ -866,7 +872,16 @@ export function LiveEvaluationView() {
       ) : (
         <LoadingOverlay loading={clear.isPending} label="Clearing history…">
           <div className="space-y-6">
-            <LoadingOverlay loading={inFlight > 0} label={`Updating scores (${inFlight} in progress)…`}>
+            <LoadingOverlay loading={inFlight > 0} label={
+                mine[0] ? (
+                  <>
+                    Updating scores ({inFlight} in progress)… <ScoringPercent key={mine[0].stage} stage={mine[0].stage} />
+                  </>
+                ) : (
+                  `Updating scores (${inFlight} in progress)…`
+                )
+              }
+            >
               <div className="space-y-6">
                 {hasMetrics && (
                   <>

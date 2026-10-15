@@ -14,7 +14,7 @@ export function LoadingOverlay({
   children,
 }: {
   loading: boolean;
-  label?: string;
+  label?: React.ReactNode;
   className?: string;
   children: React.ReactNode;
 }) {
