@@ -55,14 +55,15 @@ function RetrievalTable({ results }: { results: EvaluationResults }) {
   );
 }
 
-/** The stored, offline retrieval evaluation. The page only displays it; nothing is recomputed here. */
-export function EvaluationDashboard() {
-  const query = useEvaluation();
+/** The stored retrieval evaluation. Hidden until the first analysis finishes, then reloaded after every analysis (``runs``). */
+export function EvaluationDashboard({ runs }: { runs: number }) {
+  const query = useEvaluation(runs);
   const results = query.data?.results;
+  if (runs === 0) return null;
 
   return (
     <section aria-label="Retrieval evaluation">
-      {query.isPending && <Skeleton className="h-40 w-full" />}
+      {query.isFetching && !query.data && <Skeleton className="h-40 w-full" />}
       {query.isError && (
         <Alert variant="destructive">
           <AlertTriangle />

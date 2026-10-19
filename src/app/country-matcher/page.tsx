@@ -4,7 +4,6 @@ import { ArrowLeft } from "lucide-react";
 import { HeaderControls } from "@/app/restaurant/components/header-controls";
 import { GLASS_HEADER } from "@/app/restaurant/lib/header-style";
 import { Analyzer } from "@/app/country-matcher/components/analyzer";
-import { EvaluationDashboard } from "@/app/country-matcher/components/evaluation-dashboard";
 import { IndexedImages } from "@/app/country-matcher/components/indexed-images";
 import { Intro } from "@/app/country-matcher/components/intro";
 
@@ -33,7 +32,7 @@ export default function CountryMatcherPage() {
 
       <main className="mx-auto w-full max-w-6xl flex-1 space-y-10 px-4 py-6 sm:px-6">
         <Intro />
-        <Analyzer aside={<IndexedImages />} below={<EvaluationDashboard />} />
+        <Analyzer aside={<IndexedImages />} />
       </main>
     </div>
   );

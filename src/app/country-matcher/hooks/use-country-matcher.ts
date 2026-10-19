@@ -38,8 +38,18 @@ export function useIndexedImages(enabled: boolean, country: string | null) {
   });
 }
 
-export function useEvaluation() {
-  return useQuery({ queryKey: keys.evaluation, queryFn: countryMatcher.evaluation, staleTime: 5 * 60_000 });
+/**
+ * The evaluation is empty until the first analysis finishes, then fetched again after every analysis (``runs`` is part of
+ * the key and nothing is cached), so each Analyze shows a fresh evaluation load.
+ */
+export function useEvaluation(runs: number) {
+  return useQuery({
+    queryKey: [...keys.evaluation, runs] as const,
+    queryFn: countryMatcher.evaluation,
+    enabled: runs > 0,
+    staleTime: 0,
+    gcTime: 0,
+  });
 }
 
 export function useAnalyze() {

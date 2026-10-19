@@ -10,6 +10,7 @@ import { cn } from "@/app/restaurant/lib/utils";
 import { useAnalyze, useExamples, useModels } from "@/app/country-matcher/hooks/use-country-matcher";
 import type { QueryImage } from "@/app/country-matcher/lib/endpoints";
 import type { Example } from "@/app/country-matcher/types/api";
+import { EvaluationDashboard } from "./evaluation-dashboard";
 import { ExampleGallery } from "./example-gallery";
 import { Results, ResultsSkeleton } from "./results";
 import { UploadZone } from "./upload-zone";
@@ -61,14 +62,15 @@ function Segmented<T extends string | number>({
 }
 
 /** Sections B to D: choose a photo, analyze it with both models and read the side-by-side results. */
-/** ``aside`` is shown beside the upload section on desktop and below it on mobile; ``below`` comes after the results. */
-export function Analyzer({ aside, below }: { aside?: ReactNode; below?: ReactNode }) {
+/** ``aside`` is shown beside the upload section on desktop and below it on mobile; the evaluation comes after the results. */
+export function Analyzer({ aside }: { aside?: ReactNode }) {
   const models = useModels();
   const ready = models.data?.ready ?? false;
   const examples = useExamples(ready);
   const analyze = useAnalyze();
   const [selected, setSelected] = useState<Selected | null>(null);
   const [k, setK] = useState<number | null>(null);
+  const [runs, setRuns] = useState(0); // finished analyses: the evaluation is empty at 0 and reloaded on every increment
   const resultsRef = useRef<HTMLDivElement>(null);
   const effectiveK = k ?? models.data?.default_k ?? 5;
 
@@ -97,7 +99,7 @@ export function Analyzer({ aside, below }: { aside?: ReactNode; below?: ReactNod
     if (!selected) return;
     analyze.mutate(
       { image: selected.image, choice: "both", k: effectiveK, aggregation: "weighted" },
-      { onError: (e) => toast.error(errorMessage(e)) },
+      { onSuccess: () => setRuns((n) => n + 1), onError: (e) => toast.error(errorMessage(e)) },
     );
   };
 
@@ -190,7 +192,7 @@ export function Analyzer({ aside, below }: { aside?: ReactNode; below?: ReactNod
           {analyze.data && <Results result={analyze.data} />}
         </div>
       )}
-      {below}
+      <EvaluationDashboard runs={runs} />
     </div>
   );
 }
