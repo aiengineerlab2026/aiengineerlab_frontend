@@ -166,21 +166,28 @@ export function Analyzer({ aside, below }: { aside?: ReactNode; below?: ReactNod
         </div>
       </div>
 
-      {analyze.isPending && (
-        <>
-          <p className="text-center text-xs text-gray-500">The first request after the server wakes up can take a few seconds while the models load.</p>
-          <ResultsSkeleton count={2} />
-        </>
-      )}
-      {analyze.isError && (
-        <Alert variant="destructive">
-          <AlertTriangle />
-          <AlertTitle>Couldn&apos;t analyze this photo</AlertTitle>
-          <AlertDescription>{errorMessage(analyze.error)}</AlertDescription>
-        </Alert>
-      )}
-      {analyze.data && <Results result={analyze.data} />}
-      {below}
+      {/* Same two-column grid as the row above, so results and evaluation line up with the upload and config sections. */}
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2 *:min-w-0">
+        {(analyze.isPending || analyze.isError || analyze.data) && (
+          <div className="space-y-4">
+            {analyze.isPending && (
+              <>
+                <p className="text-center text-xs text-gray-500">The first request after the server wakes up can take a few seconds while the models load.</p>
+                <ResultsSkeleton count={2} />
+              </>
+            )}
+            {analyze.isError && (
+              <Alert variant="destructive">
+                <AlertTriangle />
+                <AlertTitle>Couldn&apos;t analyze this photo</AlertTitle>
+                <AlertDescription>{errorMessage(analyze.error)}</AlertDescription>
+              </Alert>
+            )}
+            {analyze.data && <Results result={analyze.data} />}
+          </div>
+        )}
+        <div className={cn(!(analyze.isPending || analyze.isError || analyze.data) && "lg:col-span-2")}>{below}</div>
+      </div>
     </div>
   );
 }
