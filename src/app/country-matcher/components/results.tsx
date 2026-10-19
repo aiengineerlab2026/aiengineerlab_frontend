@@ -20,7 +20,7 @@ function agreement(result: AnalysisResult): string | null {
 
 export function ResultsSkeleton({ count }: { count: number }) {
   return (
-    <div aria-busy="true" aria-label="Analyzing the image" className={cn("grid gap-4", count > 1 && "lg:grid-cols-2")}>
+    <div aria-busy="true" aria-label="Analyzing the image" className={cn("grid grid-cols-1 gap-4", count > 1 && "lg:grid-cols-2")}>
       {Array.from({ length: count }, (_, i) => (
         <div key={i} className="space-y-4 rounded-xl border border-gray-200 bg-card p-5">
           <Skeleton className="h-4 w-24" />
@@ -50,7 +50,7 @@ export function Results({ result }: { result: AnalysisResult }) {
           <AlertDescription>{note} Agreement says nothing about which model is right: see the evaluation below for measured results.</AlertDescription>
         </Alert>
       )}
-      <div className={cn("grid gap-4", cards.length > 1 ? "lg:grid-cols-2" : "mx-auto max-w-2xl")}>
+      <div className={cn("grid grid-cols-1 gap-4", cards.length > 1 ? "lg:grid-cols-2" : "mx-auto max-w-2xl")}>
         {cards.map((p) => (
           <PredictionCard key={p.model} prediction={p} query={result.query} />
         ))}

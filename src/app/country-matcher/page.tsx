@@ -33,14 +33,7 @@ export default function CountryMatcherPage() {
 
       <main className="mx-auto w-full max-w-6xl flex-1 space-y-10 px-4 py-6 sm:px-6">
         <Intro />
-        <Analyzer
-          aside={
-            <div className="space-y-5">
-              <IndexedImages />
-              <EvaluationDashboard />
-            </div>
-          }
-        />
+        <Analyzer aside={<IndexedImages />} below={<EvaluationDashboard />} />
       </main>
     </div>
   );

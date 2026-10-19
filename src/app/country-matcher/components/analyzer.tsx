@@ -61,8 +61,8 @@ function Segmented<T extends string | number>({
 }
 
 /** Sections B to D: choose a photo, analyze it with both models and read the side-by-side results. */
-/** ``aside`` is shown beside the upload section on desktop and below it on mobile. */
-export function Analyzer({ aside }: { aside?: ReactNode }) {
+/** ``aside`` is shown beside the upload section on desktop and below it on mobile; ``below`` comes after the results. */
+export function Analyzer({ aside, below }: { aside?: ReactNode; below?: ReactNode }) {
   const models = useModels();
   const ready = models.data?.ready ?? false;
   const examples = useExamples(ready);
@@ -100,7 +100,7 @@ export function Analyzer({ aside }: { aside?: ReactNode }) {
 
   return (
     <div className="space-y-5">
-      <div className="grid items-start gap-5 lg:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2 *:min-w-0">
         <section aria-labelledby="cm-upload" className="space-y-4 rounded-xl border border-gray-200 bg-card p-4 shadow-xs sm:p-5">
           <h2 id="cm-upload" className="text-base font-semibold text-gray-900">1. Choose a photo</h2>
 
@@ -138,7 +138,7 @@ export function Analyzer({ aside }: { aside?: ReactNode }) {
             onPick={onExample}
           />
         </section>
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-5">
           <section aria-labelledby="cm-model" className="space-y-4 rounded-xl border border-gray-200 bg-card p-4 shadow-xs sm:p-5">
             <h2 id="cm-model" className="text-base font-semibold text-gray-900">Config</h2>
             <div className="flex flex-wrap items-end gap-x-6 gap-y-3">
@@ -180,6 +180,7 @@ export function Analyzer({ aside }: { aside?: ReactNode }) {
         </Alert>
       )}
       {analyze.data && <Results result={analyze.data} />}
+      {below}
     </div>
   );
 }
