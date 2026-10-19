@@ -3,6 +3,7 @@
 import { Info } from "lucide-react";
 import { Alert, AlertDescription } from "@/app/restaurant/components/ui/alert";
 import { Skeleton } from "@/app/restaurant/components/ui/skeleton";
+import { cn } from "@/app/restaurant/lib/utils";
 import { MODEL_LABEL } from "@/app/country-matcher/lib/format";
 import { MODEL_IDS, type AnalysisResult } from "@/app/country-matcher/types/api";
 import { PredictionCard } from "./prediction-card";
@@ -19,7 +20,7 @@ function agreement(result: AnalysisResult): string | null {
 
 export function ResultsSkeleton({ count }: { count: number }) {
   return (
-    <div aria-busy="true" aria-label="Analyzing the image" className="grid grid-cols-1 gap-4">
+    <div aria-busy="true" aria-label="Analyzing the image" className={cn("grid grid-cols-1 gap-4", count > 1 && "lg:grid-cols-2")}>
       {Array.from({ length: count }, (_, i) => (
         <div key={i} className="space-y-4 rounded-xl border border-gray-200 bg-card p-5">
           <Skeleton className="h-4 w-24" />
@@ -37,7 +38,7 @@ export function ResultsSkeleton({ count }: { count: number }) {
   );
 }
 
-/** One card per model, stacked: the results sit in a half-width column beside the evaluation on desktop. */
+/** Side-by-side results; a single model uses the full width of a centred column. */
 export function Results({ result }: { result: AnalysisResult }) {
   const cards = MODEL_IDS.flatMap((m) => (result.predictions[m] ? [result.predictions[m]] : []));
   const note = agreement(result);
@@ -46,10 +47,10 @@ export function Results({ result }: { result: AnalysisResult }) {
       {note && (
         <Alert variant="info">
           <Info />
-          <AlertDescription>{note} Agreement says nothing about which model is right: see the evaluation for measured results.</AlertDescription>
+          <AlertDescription>{note} Agreement says nothing about which model is right: see the evaluation below for measured results.</AlertDescription>
         </Alert>
       )}
-      <div className="grid grid-cols-1 gap-4">
+      <div className={cn("grid grid-cols-1 gap-4", cards.length > 1 ? "lg:grid-cols-2" : "mx-auto max-w-2xl")}>
         {cards.map((p) => (
           <PredictionCard key={p.model} prediction={p} query={result.query} />
         ))}

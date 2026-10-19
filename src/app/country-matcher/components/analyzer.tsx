@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AlertTriangle, Database, Loader2, ScanSearch } from "lucide-react";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/app/restaurant/components/ui/alert";
@@ -69,6 +69,7 @@ export function Analyzer({ aside, below }: { aside?: ReactNode; below?: ReactNod
   const analyze = useAnalyze();
   const [selected, setSelected] = useState<Selected | null>(null);
   const [k, setK] = useState<number | null>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
   const effectiveK = k ?? models.data?.default_k ?? 5;
 
   // Object URLs of chosen files are released when replaced and when the page is left.
@@ -78,6 +79,11 @@ export function Analyzer({ aside, below }: { aside?: ReactNode; below?: ReactNod
       if (url) URL.revokeObjectURL(url);
     };
   }, [selected]);
+
+  // Bring the results into view as soon as Analyze is clicked, so the loading skeleton is visible too.
+  useEffect(() => {
+    if (analyze.isPending) resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [analyze.isPending]);
 
   const choose = (next: Selected | null) => {
     setSelected(next);
@@ -166,28 +172,25 @@ export function Analyzer({ aside, below }: { aside?: ReactNode; below?: ReactNod
         </div>
       </div>
 
-      {/* Same two-column grid as the row above, so results and evaluation line up with the upload and config sections. */}
-      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2 *:min-w-0">
-        {(analyze.isPending || analyze.isError || analyze.data) && (
-          <div className="space-y-4">
-            {analyze.isPending && (
-              <>
-                <p className="text-center text-xs text-gray-500">The first request after the server wakes up can take a few seconds while the models load.</p>
-                <ResultsSkeleton count={2} />
-              </>
-            )}
-            {analyze.isError && (
-              <Alert variant="destructive">
-                <AlertTriangle />
-                <AlertTitle>Couldn&apos;t analyze this photo</AlertTitle>
-                <AlertDescription>{errorMessage(analyze.error)}</AlertDescription>
-              </Alert>
-            )}
-            {analyze.data && <Results result={analyze.data} />}
-          </div>
-        )}
-        <div className={cn(!(analyze.isPending || analyze.isError || analyze.data) && "lg:col-span-2")}>{below}</div>
-      </div>
+      {(analyze.isPending || analyze.isError || analyze.data) && (
+        <div ref={resultsRef} className="scroll-mt-4 space-y-5">
+          {analyze.isPending && (
+            <>
+              <p className="text-center text-xs text-gray-500">The first request after the server wakes up can take a few seconds while the models load.</p>
+              <ResultsSkeleton count={2} />
+            </>
+          )}
+          {analyze.isError && (
+            <Alert variant="destructive">
+              <AlertTriangle />
+              <AlertTitle>Couldn&apos;t analyze this photo</AlertTitle>
+              <AlertDescription>{errorMessage(analyze.error)}</AlertDescription>
+            </Alert>
+          )}
+          {analyze.data && <Results result={analyze.data} />}
+        </div>
+      )}
+      {below}
     </div>
   );
 }
