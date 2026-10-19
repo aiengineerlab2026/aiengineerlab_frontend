@@ -15,7 +15,7 @@ import type { AppInfo } from "@/app/restaurant/types/api";
 const LOGOS: Record<string, string> = { restaurant: "/restaurant-logo.jpg" };
 
 /** Where each app lives in this frontend; takes precedence over the route the backend reports (older backends say /apps/restaurant). */
-const ROUTES: Record<string, string> = { restaurant: "/restaurant", myresume: "/test-resume-job-match" };
+const ROUTES: Record<string, string> = { restaurant: "/restaurant", myresume: "/test-resume-job-match", "country-matcher": "/country-matcher" };
 
 /** Source repository per app id (the URLs come from env, see lib/links.ts). */
 const GITHUB_URLS: Record<string, string | undefined> = { restaurant: RESTAURANT_GITHUB_URL, myresume: MYRESUME_GITHUB_URL };

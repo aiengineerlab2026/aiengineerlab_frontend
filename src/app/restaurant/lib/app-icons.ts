@@ -1,9 +1,10 @@
-import { Bot, FileUser, FlaskConical, Utensils, type LucideIcon } from "lucide-react";
+import { Bot, FileUser, FlaskConical, Globe, Utensils, type LucideIcon } from "lucide-react";
 
 /** Maps the `icon` string from the backend app registry to a Lucide icon. */
 const ICONS: Record<string, LucideIcon> = {
   utensils: Utensils,
   "file-user": FileUser,
+  globe: Globe,
   flask: FlaskConical,
   bot: Bot,
 };
